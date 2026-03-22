@@ -28,6 +28,11 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.findAllReservations());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Reservation> getReservation(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.getReservationById(id));
+    }
+
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
         Reservation created = reservationService.createReservation(reservation);

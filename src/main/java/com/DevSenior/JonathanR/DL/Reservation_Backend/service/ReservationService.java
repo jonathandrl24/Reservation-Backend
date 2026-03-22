@@ -23,8 +23,17 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public Reservation getReservationById(Long id) {
+        return reservationRepository
+                .findById(id)
+                .orElseThrow(() -> new ReservationBusinessException(
+                        "Reservation not found for id: " + id, HttpStatus.NOT_FOUND));
+    }
+
     @Transactional
     public Reservation createReservation(Reservation reservation) {
+        reservation.setId(null);
         if (reservationRepository.existsByDateAndTimeAndStatus(
                 reservation.getDate(), reservation.getTime(), ReservationStatus.ACTIVE)) {
             throw new ReservationBusinessException(
