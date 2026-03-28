@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -52,7 +54,13 @@ public class Reservation {
     @Schema(example = "Haircut", requiredMode = Schema.RequiredMode.REQUIRED)
     private String service;
 
+    /**
+     * Persisted as small integer (ordinal): ACTIVE=0, CANCELED=1.
+     * Matches typical PostgreSQL columns created before {@code EnumType.STRING} was used; STRING + varchar would be
+     * preferable for new schemas only.
+     */
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "ACTIVE")
     private ReservationStatus status;
 
